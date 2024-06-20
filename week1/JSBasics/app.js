@@ -80,4 +80,27 @@ while (numberOfStudents > 0) {
 const numStr = 'sfsdf';
 console.log(Number(numStr));
 console.log(isNaN(Number(numStr)));
-console.log(this);
+
+//Functions
+// Function Declaration
+console.log('Hoisting', add(5, 8));
+function add(a, b) {
+  return a + b;
+}
+add(3, 4); // this will not show anything since we are not using/storing the value
+let sum = add(3, 4);
+console.log(sum);
+console.log(add(4, 5));
+// Function Expression
+// console.log('DOES THIS WORK', subtract(5, 3)); //ReferenceError: Cannot access 'subtract' before initialization
+const subtract = function (a, b) {
+  return a - b;
+};
+console.log(subtract(5, 3));
+// Arrow Function (Expression)
+const divide = (a, b) => {
+  return a / b;
+};
+const divide2 = (a, b) => a / b;
+const divide3 = a => a / 3;
+console.log(divide(4, 2));
