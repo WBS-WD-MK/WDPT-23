@@ -137,3 +137,66 @@ function getDayName(dayNumber) {
 }
 const dayNameResult = getDayName(3);
 console.log(dayNameResult);
+
+/**
+ * 
+Part 2: Function Expressions
+Repeat the above steps using function expressions assigned to variables.
+Rewrite the greet function as a function expression assigned to a variable named greetExpression.
+Rewrite the square function as a function expression assigned to a variable named squareExpression.
+Rewrite the getDayName function as a function expression assigned to a variable named getDayNameExpression.
+Discussion:
+Discuss the difference between function declarations and function expressions. 
+ */
+function greet() {
+  console.log('Hello');
+}
+greet();
+/*
+
+
+Declare a function with one parameter that returns something.
+Declare a function named square that takes a number as a parameter and returns its square.
+Call the function with the argument 5, store the result in a variable, and output it to the console.
+*/
+const greetFunction = function (name) {
+  return `hello ${name}`;
+};
+console.log(greetFunction('john'));
+const squareFunction = function (a) {
+  return a * a;
+};
+console.log(squareFunction(5));
+
+const getDayNameFunction = function (dayNumber) {
+  let dayName = '';
+  switch (dayNumber) {
+    case 0:
+      dayName = 'Sunday';
+      break;
+    case 1:
+      dayName = 'Monday';
+      break;
+    case 2:
+      dayName = 'Tuesday';
+      break;
+    case 3:
+      dayName = 'Wednesday';
+      break;
+    case 4:
+      dayName = 'Thursday';
+      break;
+    case 5:
+      dayName = 'Friday';
+      break;
+    case 6:
+      dayName = 'Saturday';
+      break;
+    default:
+      dayName = 'Invalid day number';
+      break;
+  }
+  return dayName;
+};
+const dayNameResult = getDayNameFunction(3);
+console.log(dayNameResult);
