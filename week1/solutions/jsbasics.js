@@ -198,5 +198,5 @@ const getDayNameFunction = function (dayNumber) {
   }
   return dayName;
 };
-const dayNameResult = getDayNameFunction(3);
+const dayNameResult2 = getDayNameFunction(3);
 console.log(dayNameResult);
