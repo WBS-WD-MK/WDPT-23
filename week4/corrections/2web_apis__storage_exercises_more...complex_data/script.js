@@ -1,28 +1,77 @@
-// You can work here or download the template
-/**
-Store data:
+const form = document.querySelector('form');
+const ul = document.querySelector('ul');
+const reload = document.querySelector('#reload');
 
-From the boilerplate, get the contents of the input once the form is submitted.
-Make sure the input is not empty before saving!
-For every user input, create an object with the following properties:
-id: check this out,since an UUID may not a valid CSS selector, we will remove the hyphens and prepend the prefix task-
-content: the user input
-Store this value in localStorage as part of an array. Store the new value at the beginning of the array!
-Reset the form
-Retrieve data:
+const createListItem = newTask => {
+  // Adding task to DOM
+  // List item
+  const li = document.createElement('li');
+  li.setAttribute('id', newTask.id);
+  li.textContent = newTask.content;
+  li.classList.add('flex', 'items-center', 'justify-between', 'w-full', 'my-2');
+  // Button
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.classList.add(
+    'px-4',
+    'py-2',
+    'bg-red-500',
+    'hover:bg-red-400',
+    'text-white',
+    'rounded',
+  );
+  // Button event
+  deleteButton.addEventListener('click', () => {
+    const itemToDelete = ul.querySelector(`#${newTask.id}`);
+    console.log('item', itemToDelete);
+    // Delete element from storage preserving the rest
+    const existingTasks = JSON.parse(localStorage.getItem('myTasks') || []);
+    console.log(
+      'ADSFSDAF',
+      existingTasks.filter(t => t.id !== newTask.id),
+    );
+    localStorage.setItem('myTasks', JSON.stringify(existingTasks.filter(t => t.id !== newTask.id)));
 
-Every time you hit the "Submit" button, add a new list item to the empty ul. Make sure the new item is at the top!
-Set the id of the object as an id to the list item element, it'll come in handy.
-Within the list item, add a red button that reads 'Delete'. Make it look cool! :D
-Attach an event to this button on click, for now, just log the id of the item!
-Make sure that when the document loads, you populate the contents of your storage item into the list. You can try to add an event listener of type load to the window itself!
-Delete:
+    itemToDelete.remove();
+  });
+  // Adding button to list item and item to list
+  li.appendChild(deleteButton);
+  return li;
+};
 
-Make sure that clicking on a given 'Delete' button, deletes the item from the DOM but also from the array in localStorage. Tip: use the .filter method 
-Reload:
+// Add event listener
+form.addEventListener('submit', e => {
+  // Prevent default to avoid reload of page
+  e.preventDefault();
+  // Check input has a value
+  const userInput = e.target.elements.userInput.value;
+  if (!userInput) return alert('Please enter something before submitting');
+  // Get previous content from localStorage: key name "myTasks"
+  const myTasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+  // Creating object
+  const newTask = {
+    id: `task-${crypto.randomUUID()}`,
+    content: userInput,
+  };
+  const li = createListItem(newTask);
+  ul.prepend(li);
+  // Adding task to localStorage
+  myTasks.unshift(newTask);
+  localStorage.setItem('myTasks', JSON.stringify(myTasks));
+  // Reset form
+  e.target.reset();
+});
+// Reload event
+reload.addEventListener('click', () => {
+  window.location.reload();
+});
 
-Just because we can. Add an event to the reload button so it reloads the preview. Your store data should reload too!
-Bonus:
-
-Chances are your code for creating the list items on load and new creation is VERY similar, if not the same, try to abstract it into a reusable function called createListItem. This approach is called DRY
- */
+// Read and load data
+window.addEventListener('load', () => {
+  // Get previous content from localStorage: key name "myTasks"
+  const myTasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+  myTasks.forEach(t => {
+    const li = createListItem(t);
+    ul.appendChild(li);
+  });
+});
