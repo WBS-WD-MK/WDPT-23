@@ -13,3 +13,65 @@ Create another subclass Member with private fields name and booksCheckedOut (an 
 
 In this example, the getInfo() method in LibraryItem and Book classes is a form of polymorphism. Remember, objects responding differently to the same methods. 
  */
+class LibraryItem {
+  #title;
+  #author;
+  constructor(title, author) {
+    this.#title = title;
+    this.#author = author;
+  }
+  get getTitle() {
+    return this.#title;
+  }
+  get getAuthor() {
+    return this.#author;
+  }
+  getInfo() {
+    return `Title ${this.#title}, Author ${this.#author}.`;
+  }
+}
+
+class Book extends LibraryItem {
+  #pages;
+  constructor(title, author, pages) {
+    super(title, author);
+    this.#pages = pages;
+  }
+  getInfo() {
+    return `Title ${this.getTitle}, Author ${this.getAuthor}, Pages ${this.#pages}.`;
+  }
+}
+class Member {
+  #name;
+  #booksCheckedOut;
+  constructor(name, booksCheckedOut = []) {
+    this.#name = name;
+    this.#booksCheckedOut = booksCheckedOut;
+  }
+  get getName() {
+    return this.name;
+  }
+  get getBooksCheckedOut() {
+    return this.#booksCheckedOut;
+  }
+  checkOutBook(book) {
+    this.#booksCheckedOut.push(book);
+  }
+  returnBook(book) {
+    this.#booksCheckedOut = this.#booksCheckedOut.filter(b => b !== book);
+  }
+  listBooks() {
+    return this.#booksCheckedOut;
+  }
+}
+
+const book = new Book('test', 'author1', 500);
+const book1 = new Book('test2', 'author12', 200);
+console.log(book.getInfo());
+
+const member = new Member('John');
+member.checkOutBook(book);
+member.checkOutBook(book1);
+console.log(member.listBooks());
+member.returnBook(book1);
+console.log(member.listBooks());
