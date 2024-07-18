@@ -20,3 +20,18 @@ Import the functions from the modules
 Call these functions to fetch products and handle user interactions.
 This setup will help you practice using ES Modules, interacting with APIs, manipulating the DOM, and using localStorage. Good luck and happy coding!
  */
+
+import { FetchProducts } from './modules/network.js';
+import { createProductCard } from './modules/ui.js';
+const productsContainer = document.getElementById('product-container');
+window.addEventListener('load', async () => {
+  try {
+    const products = await FetchProducts();
+    products.forEach(product => {
+      const productCard = createProductCard(product);
+      productsContainer.appendChild(productCard);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
