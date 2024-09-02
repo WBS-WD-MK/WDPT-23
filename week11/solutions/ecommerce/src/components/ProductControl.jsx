@@ -3,22 +3,22 @@ import { addToCart, removeFromCart } from '../utils/cartUtils';
 import { useOutletContext } from 'react-router-dom';
 const ProductControl = ({ product }) => {
   const { cart, setCart } = useOutletContext();
-  const inCart = cart.findIndex((p) => p.id === product.id);
+  const productIndex = cart.findIndex((p) => p.id === product.id);
 
   return (
     <div className='card-actions justify-center'>
-      {inCart !== -1 ? (
+      {productIndex !== -1 ? (
         <div>
           <button
             className='btn btn-primary'
-            onClick={() => setCart(removeFromCart(cart, product))}
+            onClick={() => setCart(removeFromCart(cart, product, productIndex))}
           >
             -
           </button>
-          <span className='px-4'>{cart[inCart].quantity}</span>
+          <span className='px-4'>{cart[productIndex].quantity}</span>
           <button
             className='btn btn-primary'
-            onClick={() => setCart(addToCart(cart, product, inCart))}
+            onClick={() => setCart(addToCart(cart, product, productIndex))}
           >
             +
           </button>
@@ -26,7 +26,7 @@ const ProductControl = ({ product }) => {
       ) : (
         <button
           className='btn btn-primary'
-          onClick={() => setCart(addToCart(cart, product, inCart))}
+          onClick={() => setCart(addToCart(cart, product, productIndex))}
         >
           Add to Cart
         </button>
