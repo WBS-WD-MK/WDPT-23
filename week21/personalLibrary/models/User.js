@@ -27,6 +27,20 @@ import { Schema, model } from 'mongoose';
  *           type: string
  *           description: The user's email address
  *           example: "john.doe@example.com"
+ *         readingList:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               bookRefId:
+ *                 type: string
+ *                 description: Reference to the book
+ *                 example: "64b5f7a8c1e4f5b3c1d9e9e4"
+ *               status:
+ *                 type: string
+ *                 enum: ['read', 'in-progress', 'pending']
+ *                 description: The status of the book in the reading list
+ *                 example: "read"
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -40,11 +54,17 @@ import { Schema, model } from 'mongoose';
  *           readOnly: true
  *           example: "2023-10-01T00:00:00.000Z"
  */
+const readingListItemSchema = new Schema({
+  bookRefId: { type: Schema.Types.ObjectId, ref: 'Book', required: true },
+  status: { type: String, enum: ['read', 'in-progress', 'pending'], required: true },
+});
+
 const userSchema = new Schema(
   {
     firstName: { type: String, required: [true, 'First name is required'] },
     lastName: { type: String, required: [true, 'Last name is required'] },
     email: { type: String, required: [true, 'Email is required'], unique: true },
+    readingList: [readingListItemSchema],
   },
   {
     timestamps: true,
