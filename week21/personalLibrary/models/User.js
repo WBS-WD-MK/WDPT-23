@@ -65,6 +65,12 @@ const userSchema = new Schema(
     lastName: { type: String, required: [true, 'Last name is required'] },
     email: { type: String, required: [true, 'Email is required'], unique: true },
     readingList: [readingListItemSchema],
+    // readingList: [
+    //   {
+    //     _id: { type: Schema.Types.ObjectId, ref: 'Book' },
+    //     status: { type: String, enum: ['read', 'in-progress', 'pending'], required: true },
+    //   },
+    // ],
   },
   {
     timestamps: true,
