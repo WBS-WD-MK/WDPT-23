@@ -1,6 +1,13 @@
 import { Link, NavLink } from 'react-router-dom';
-
+import { useAuth } from '@/context';
 const Navbar = () => {
+  const { user, signout } = useAuth();
+  const handleSignout = async () => {
+    const res = await signout();
+    if (!res.error) {
+      window.location.reload();
+    }
+  };
   return (
     <div className='navbar bg-base-100'>
       <div className='flex-1'>
@@ -19,15 +26,25 @@ const Navbar = () => {
           <li>
             <NavLink to='/'>Home</NavLink>
           </li>
-          <li>
-            <NavLink to='/create'>Create post</NavLink>
-          </li>
-          <li>
-            <NavLink to='/register'>Register</NavLink>
-          </li>
-          <li>
-            <NavLink to='/login'>Login</NavLink>
-          </li>
+          {user ? (
+            <>
+              <li>
+                <NavLink to='/create'>Create post</NavLink>
+              </li>
+              <li>
+                <button onClick={handleSignout}>signout</button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <NavLink to='/register'>Register</NavLink>
+              </li>
+              <li>
+                <NavLink to='/login'>Login</NavLink>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>

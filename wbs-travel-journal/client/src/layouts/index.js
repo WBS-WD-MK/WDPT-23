@@ -1,3 +1,3 @@
 import RootLayout from './RootLayout';
-
-export { RootLayout };
+import ProtectedLayout from './ProtectedLayout';
+export { RootLayout, ProtectedLayout };

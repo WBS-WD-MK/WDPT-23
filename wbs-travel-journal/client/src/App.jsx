@@ -3,9 +3,9 @@ import {
   createRoutesFromElements,
   Route,
   Outlet,
-  RouterProvider
+  RouterProvider,
 } from 'react-router-dom';
-import { RootLayout } from '@/layouts';
+import { ProtectedLayout, RootLayout } from '@/layouts';
 import { CreatePost, Error, Home, Login, NotFound, Post, Register } from '@/pages';
 
 const router = createBrowserRouter(
@@ -16,11 +16,13 @@ const router = createBrowserRouter(
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
         <Route path='post/:id' element={<Post />} />
-        <Route path='create' element={<CreatePost />} />
+        <Route element={<ProtectedLayout />} errorElement={<Error />}>
+          <Route path='create' element={<CreatePost />} />
+        </Route>
         <Route path='*' element={<NotFound />} />
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 const App = () => <RouterProvider router={router} />;

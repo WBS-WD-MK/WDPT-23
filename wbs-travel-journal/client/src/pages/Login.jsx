@@ -1,22 +1,33 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { useAuth } from '@/context';
+import { useNavigate, useLocation } from 'react-router-dom';
 const Login = () => {
   const [{ email, password }, setForm] = useState({
     email: '',
-    password: ''
+    password: '',
   });
+  const { signin, setCheckSession } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       if (!email || !password) throw new Error('All fields are required');
       setLoading(true);
       console.log(email, password);
+      const res = await signin({ email, password });
+      if (res.error) {
+        setError(res.error);
+      }
+      setCheckSession((prev) => !prev);
+      console.log('location.state?.next', location.state?.next);
+      navigate(location.state?.next || '/');
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -76,6 +87,7 @@ const Login = () => {
       <button className='btn btn-primary self-center' disabled={loading}>
         Login
       </button>
+      {<p>{error}</p>}
     </form>
   );
 };

@@ -1,34 +1,48 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { useAuth } from '@/context';
 const Register = () => {
-  const [{ firstName, lastName, email, password, confirmPassword }, setForm] = useState({
+  const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { signup, setCheckSession } = useAuth();
+  const navigate = useNavigate();
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      if (!firstName || !lastName || !email || !password || !confirmPassword)
+      if (
+        !form.firstName ||
+        !form.lastName ||
+        !form.email ||
+        !form.password ||
+        !form.confirmPassword
+      )
         throw new Error('All fields are required');
-      if (password !== confirmPassword) throw new Error('Passwords do not match');
+      if (form.password !== form.confirmPassword) throw new Error('Passwords do not match');
       setLoading(true);
-      console.log(firstName, lastName, email, password, confirmPassword);
+      const { confirmPassword, ...rest } = form;
+      const res = await signup(rest);
+      if (res.error) {
+        setError(res.error);
+      }
+      setCheckSession((prev) => !prev);
+      navigate('/');
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
-
+  const { firstName, lastName, email, password, confirmPassword } = form;
   return (
     <form className='my-5 md:w-1/2 mx-auto flex flex-col gap-3' onSubmit={handleSubmit}>
       <div className='flex justify-between gap-2'>
@@ -141,6 +155,7 @@ const Register = () => {
       <button className='btn btn-primary self-center' disabled={loading}>
         Create Account
       </button>
+      <p>{error}</p>
     </form>
   );
 };

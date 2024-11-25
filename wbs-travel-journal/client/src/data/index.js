@@ -1,3 +1,3 @@
 import { createPost, getPosts, getSinglePost } from './posts';
-
-export { createPost, getPosts, getSinglePost };
+import { me, signin, signup, signout } from './auth';
+export { createPost, getPosts, getSinglePost, me, signin, signup, signout };
